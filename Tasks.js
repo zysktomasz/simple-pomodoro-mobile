@@ -2,7 +2,7 @@ import React from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
 import TasksList from './TasksList'
 
-let taskID = 1
+let taskID = 4
 
 const styles = StyleSheet.create({
     footer: {
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         color: '#fff',
         padding: 15,
-        backgroundColor: '#252525',
+        backgroundColor: 'white',
         borderTopWidth:2,
         borderTopColor: 'red'
     },
@@ -45,7 +45,11 @@ class Tasks extends React.Component {
 
         this.state = {
             taskText: null,
-            tasks: []
+            tasks: [
+                {id: 1, name: "testowy1", checked: false},
+                {id: 2, name: "testowy2", checked: false},
+                {id: 3, name: "testowy3", checked: false},
+            ]
         }
     }
 
@@ -66,16 +70,25 @@ class Tasks extends React.Component {
         }
     }
 
+    deleteTask(id) {
+        this.setState(prevState => ({
+            tasks: prevState.tasks.filter(task => task.id !== id)
+        }))
+    }
+
     render() {
         return (
             <View style={{flex: 1}}>
-                <TasksList tasks={this.state.tasks} />
+                <TasksList 
+                    tasks={this.state.tasks}
+                    onDelete={this.deleteTask.bind(this)}
+                />
                 <View style={styles.footer}>
                     <TextInput 
                         style={styles.textInput}
                         onChangeText={(taskText) => this.setState({taskText})}
                         value={this.state.taskText}
-                        placeholder=">note"
+                        placeholder=">task"
                         placeholderTextColor="black">
                     </TextInput>
                 </View>

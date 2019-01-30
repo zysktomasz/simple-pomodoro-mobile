@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, FlatList, ScrollView} from 'react-native'
+import {View, Text, StyleSheet, FlatList, ScrollView, TouchableOpacity} from 'react-native'
 
 const styles = StyleSheet.create({
     scrollContainer: {
@@ -13,6 +13,19 @@ const styles = StyleSheet.create({
         borderBottomWidth:3,
         borderBottomColor: '#ededed'
     },
+    taskDelete: {
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'red',
+        padding: 10,
+        top: 10,
+        bottom: 10,
+        right: 10
+    },
+    taskDeleteText: {
+        color: 'white'
+    }
 })
 
 class TasksList extends React.Component {
@@ -24,6 +37,11 @@ class TasksList extends React.Component {
     renderItem = ({item}) => (
       <View style={styles.task}>
         <Text style={{ paddingLeft: 20, borderLeftWidth: 10, borderLeftColor: 'orange' }}>{item.name}</Text>
+        <TouchableOpacity 
+              style={styles.taskDelete}
+              onPress={() => this.props.onDelete(item.id)}>
+                <Text style={styles.taskDeleteText}>X</Text>
+        </TouchableOpacity>
       </View>
     )
 
