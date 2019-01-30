@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, Text, Button, StyleSheet} from 'react-native'
-const ACTIVITY_TIME = 5
-const BREAK_TIME = 20
+const ACTIVITY_TIME = 1200 // 20 min
+const BREAK_TIME = 300 // 5 min
 const COUNTDOWN_ACTIVITY_MODE = 'COUNTDOWN_ACTIVITY_MODE'
 const COUNTDOWN_BREAK_MODE = 'COUNTDOWN_BREAK_MODE'
 
