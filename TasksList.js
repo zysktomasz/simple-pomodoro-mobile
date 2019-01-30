@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, FlatList, ScrollView, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, SectionList} from 'react-native'
 
 const styles = StyleSheet.create({
     scrollContainer: {
@@ -25,7 +25,17 @@ const styles = StyleSheet.create({
     },
     taskDeleteText: {
         color: 'white'
-    }
+    },
+    taskMarkAsDone: {
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'green',
+        padding: 10,
+        top: 10,
+        bottom: 10,
+        right: 50
+    },
 })
 
 class TasksList extends React.Component {
@@ -42,17 +52,31 @@ class TasksList extends React.Component {
               onPress={() => this.props.onDelete(item.id)}>
                 <Text style={styles.taskDeleteText}>X</Text>
         </TouchableOpacity>
+        <TouchableOpacity 
+              style={styles.taskMarkAsDone}
+              onPress={() => this.props.onToggle(item.id)}>
+                <Text style={styles.taskDeleteText}>done</Text>
+        </TouchableOpacity>
       </View>
     )
+
+    renderSection = ({section}) => 
+        (section.data.length > 0) ? (
+            <Text style={{fontWeight: 'bold'}}>{section.title} ({section.data.length})</Text>
+        ) : null
 
     render() {
         return (
             <ScrollView style={styles.scrollContainer}>
-                <FlatList 
-                    data={this.props.tasks}
+                <SectionList
                     renderItem={this.renderItem}
-                    keyExtractor={(item, id) => id.toString()}
-                />
+                    renderSectionHeader={this.renderSection}
+                    sections={[
+                        {title: 'Todo', data: this.props.tasks.filter(task => !task.checked)},
+                        {title: 'Done', data: this.props.tasks.filter(task => task.checked)},
+                    ]}
+                    keyExtractor={(item, index) => item + index}
+                    />
             </ScrollView>
         )
     }

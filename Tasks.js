@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     },
     textInput: {
         alignSelf: 'stretch',
-        color: '#fff',
+        color: '#000',
         padding: 15,
         backgroundColor: 'white',
         borderTopWidth:2,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         zIndex: 11,
         right: 20,
-        bottom: 60,
+        bottom: 70,
         backgroundColor: '#E91E63',
         width: 70,
         height: 70,
@@ -76,12 +76,26 @@ class Tasks extends React.Component {
         }))
     }
 
+    toggleChecked(id) {
+        this.setState(prevState => ({
+            tasks: prevState.tasks.map(task => {
+              if (task.id !== id) return task
+              return {
+                id: task.id,
+                name: task.name,
+                checked: !task.checked
+              }
+            })
+          }))
+    }
+
     render() {
         return (
             <View style={{flex: 1}}>
                 <TasksList 
                     tasks={this.state.tasks}
                     onDelete={this.deleteTask.bind(this)}
+                    onToggle={this.toggleChecked.bind(this)}
                 />
                 <View style={styles.footer}>
                     <TextInput 
