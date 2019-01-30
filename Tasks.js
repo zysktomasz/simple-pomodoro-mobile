@@ -55,8 +55,10 @@ class Tasks extends React.Component {
                         name: this.state.taskText,
                         checked: false
                     }
-                ]
+                ],
+                taskText: null
             })
+            
         }
     }
 
