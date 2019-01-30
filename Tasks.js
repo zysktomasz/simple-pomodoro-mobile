@@ -5,18 +5,8 @@ import TasksList from './TasksList'
 let taskID = 4
 
 const styles = StyleSheet.create({
-    footer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 10
-    },
     textInput: {
-        alignSelf: 'stretch',
-        color: '#000',
         padding: 15,
-        backgroundColor: 'white',
         borderTopWidth:2,
         borderTopColor: 'red'
     },
@@ -26,9 +16,9 @@ const styles = StyleSheet.create({
         right: 20,
         bottom: 70,
         backgroundColor: '#E91E63',
-        width: 70,
-        height: 70,
-        borderRadius: 35,
+        width: 50,
+        height: 50,
+        borderRadius: 25,
         alignItems: 'center',
         justifyContent: 'center',
         elevation: 8
@@ -97,7 +87,7 @@ class Tasks extends React.Component {
                     onDelete={this.deleteTask.bind(this)}
                     onToggle={this.toggleChecked.bind(this)}
                 />
-                <View style={styles.footer}>
+                <View>
                     <TextInput 
                         style={styles.textInput}
                         onChangeText={(taskText) => this.setState({taskText})}
@@ -106,6 +96,7 @@ class Tasks extends React.Component {
                         placeholderTextColor="black">
                     </TextInput>
                 </View>
+                {/* button to submit new task */}
                 <TouchableOpacity 
                     style={styles.addButton}
                     onPress={() => this.addTask()}>
