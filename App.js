@@ -1,6 +1,10 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 
+// import redux-related stuff
+import { Provider } from 'react-redux';
+import store from './app/redux/store';
+
 import PomodoroScreen from './app/components/screens/PomodoroScreen'
 import SettingsScreen from './app/components/screens/SettingsScreen'
 
@@ -19,6 +23,10 @@ const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
   render() {
-    return <AppContainer />;
+    return (
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
+    );
   }
 }
