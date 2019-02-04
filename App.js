@@ -1,17 +1,24 @@
-import React, {Component} from 'react';
-import {View} from 'react-native';
-import Countdown from './Countdown';
-import Tasks from './Tasks'
+import React from 'react';
+import { createStackNavigator, createAppContainer } from 'react-navigation'
 
-export default class App extends Component {
+import PomodoroScreen from './app/components/screens/PomodoroScreen'
+import SettingsScreen from './app/components/screens/SettingsScreen'
+
+
+const AppNavigator = createStackNavigator(
+  {
+  Pomodoro: PomodoroScreen,
+  Settings: SettingsScreen
+  },
+  {
+    initialRouteName: "Pomodoro"
+  }
+);
+
+const AppContainer = createAppContainer(AppNavigator);
+
+export default class App extends React.Component {
   render() {
-    return (  
-      <View style={{backgroundColor: '#F5FCFF', flex: 1}}>
-        <Countdown />
-        <Tasks />
-      </View>
-    );
+    return <AppContainer />;
   }
 }
-
-
