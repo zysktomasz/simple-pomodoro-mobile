@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Button } from "react-native";
 
-import Countdown from "../Countdown";
-import Tasks from "../Tasks";
+import Countdown from "../countdown/Countdown";
+import Tasks from "../tasks/Tasks";
 
 class PomodoroScreen extends React.Component {
   static navigationOptions =  ({ navigation }) => {
