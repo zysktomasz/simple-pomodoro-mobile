@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "electron": "^4.0.3",
+    "native-base": "^2.11.0",
     "react": "16.6.3",
     "react-native": "0.58.1",
     "react-native-gesture-handler": "^1.0.15",
