@@ -38,7 +38,7 @@ class TasksList extends React.Component {
                         {title: 'Todo', data: this.props.tasks.filter(task => !task.checked)},
                         {title: 'Done', data: this.props.tasks.filter(task => task.checked)},
                     ]}
-                    keyExtractor={(item, index) => item + index}
+                    keyExtractor={(item, index) => item.id}
                     />
             </ScrollView>
         )

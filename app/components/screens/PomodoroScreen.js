@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Button } from "react-native";
-import { connect } from 'react-redux'
 
 import Countdown from "../countdown/Countdown";
 import Tasks from "../tasks/Tasks";
@@ -23,12 +22,4 @@ class PomodoroScreen extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    countdown: state.countdown,
-    tasks: state.tasks,
-    settings: state.settings
-  }
-}
-
-export default connect(mapStateToProps)(PomodoroScreen);
+export default PomodoroScreen;

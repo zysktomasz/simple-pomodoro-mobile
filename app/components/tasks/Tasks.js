@@ -1,8 +1,9 @@
 import React from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
-import TasksList from './TasksList'
+import { connect } from 'react-redux'
+import { addTask, toggleChecked, deleteTask } from './../../redux/tasksActions'
 
-let taskID = 4
+import TasksList from './TasksList'
 
 const styles = StyleSheet.create({
     textInput: {
@@ -34,60 +35,27 @@ class Tasks extends React.Component {
         super(props)
 
         this.state = {
-            taskText: null,
-            tasks: [
-                {id: 1, name: "testowy1", checked: false},
-                {id: 2, name: "testowy2", checked: false},
-                {id: 3, name: "testowy3", checked: false},
-            ]
+            taskText: null
         }
     }
 
-    addTask() {
+
+    onAddTask() {
         if (this.state.taskText)
         {
-            taskID++
-            this.setState({
-                tasks: [  
-                    ...this.state.tasks, 
-                    {
-                        id: taskID,
-                        name: this.state.taskText,
-                        checked: false
-                    }
-                ],
-                taskText: null
-            })
-            
+            this.props.addTask(this.state.taskText)
+            this.setState({ taskText: null })
         }
-    }
-
-    deleteTask(id) {
-        this.setState(prevState => ({
-            tasks: prevState.tasks.filter(task => task.id !== id)
-        }))
-    }
-
-    toggleChecked(id) {
-        this.setState(prevState => ({
-            tasks: prevState.tasks.map(task => {
-              if (task.id !== id) return task
-              return {
-                id: task.id,
-                name: task.name,
-                checked: !task.checked
-              }
-            })
-          }))
     }
 
     render() {
+        // displays tasks list and input w/ button to add new task
         return (
             <View style={{flex: 1}}>
                 <TasksList 
-                    tasks={this.state.tasks}
-                    onDelete={this.deleteTask.bind(this)}
-                    onToggle={this.toggleChecked.bind(this)}
+                    tasks={this.props.tasks.tasksList}
+                    onDelete={this.props.deleteTask}
+                    onToggle={this.props.toggleChecked}
                 />
                 <View>
                     <TextInput 
@@ -101,7 +69,7 @@ class Tasks extends React.Component {
                 {/* button to submit new task */}
                 <TouchableOpacity 
                     style={styles.addButton}
-                    onPress={() => this.addTask()}>
+                    onPress={() => this.onAddTask()}>
                         <Text style={styles.addButtonText}>+</Text>
                 </TouchableOpacity>
             </View>
@@ -109,5 +77,18 @@ class Tasks extends React.Component {
     }
 }
 
-export default Tasks;
+const mapStateToProps = state => {
+    return {
+        tasks: state.tasks,
+    }
+}
 
+const mapDispatchToProps = dispatch => {
+    return {
+        addTask: (name) => dispatch(addTask(name)),
+        toggleChecked: (id) => dispatch(toggleChecked(id)),
+        deleteTask: (id) => dispatch(deleteTask(id))
+    }
+}
+  
+export default connect(mapStateToProps, mapDispatchToProps)(Tasks);
