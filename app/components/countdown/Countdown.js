@@ -1,5 +1,13 @@
 import React from 'react'
 import { View, Text, Button } from 'native-base'
+
+// redux related stuff
+import { connect } from 'react-redux'
+import { startCountdown, stopCountdown, pauseCountdown, decrementTimer,
+        toggleMode
+      } from './../../redux/countdownActions'
+
+
 const ACTIVITY_TIME = 1200 // 20 min
 const BREAK_TIME = 300 // 5 min
 const COUNTDOWN_ACTIVITY_MODE = 'COUNTDOWN_ACTIVITY_MODE'
@@ -9,102 +17,68 @@ class Countdown extends React.Component {
     constructor(props) {
         super(props)
     }
-    state = {
-        isCountdownRunning: false,
-        countdownMode: COUNTDOWN_ACTIVITY_MODE,
-        countdownTime: ACTIVITY_TIME,
-        backgroundColor: '#F5FCFF'
-    }
     intervalID = null
 
-    // starts countdown
-  startCountdown() {
-    let bgColor = (this.state.countdownMode === COUNTDOWN_ACTIVITY_MODE) ? '#ffdbb0' : 'green'
-    
-    this.setState({ 
-      isCountdownRunning: true,
-      backgroundColor: bgColor
-    })
-    this.intervalID = setInterval(() => this.decreaseCountdownTime(), 1000)
-  }
-
-  // pauses countdown
-  pauseCountdown() {
-    clearInterval(this.intervalID)
-    this.setState({ isCountdownRunning: false })    
-  }
-
-  // stops activity countdown and sets it with original time
-  stopCountdown() {
-    clearInterval(this.intervalID)
-    this.setState({ 
-      isCountdownRunning: false,
-      countdownMode: COUNTDOWN_ACTIVITY_MODE,
-      countdownTime: ACTIVITY_TIME,
-      backgroundColor: '#F5FCFF'
-    })
-  }
-
-  // invoked each second (timer's tick)
-  decreaseCountdownTime() {
-    // switch between ACTIVITY and BREAK modes
-    if (this.state.countdownTime <= 0)
-    {
-      // stop currently running timer
-      clearInterval(this.intervalID)
-      // change from ACTIVITY to BREAK mode
-      if (this.state.countdownMode === COUNTDOWN_ACTIVITY_MODE)
+    componentWillReceiveProps(nextProps) {
+      // check if countdown got to 00:00
+      if (nextProps.countdown.countdownTime <= 0)
       {
-        this.setState({
-          countdownMode: COUNTDOWN_BREAK_MODE,
-          countdownTime: BREAK_TIME,
-          backgroundColor: 'green'
-        })
+        // stop currently running timer
+        clearInterval(this.intervalID)
+        // change countdown modes (sends currently running mode as parameter)
+        this.props.toggleMode(nextProps.countdown.countdownMode);
+        // start timer with updated mode
+        this.intervalID = setInterval(() => this.onDecrementTimer(), 1000)  
+
+        console.log("dupa")
       }
-      // change from BREAK to ACTIVITY mode
-      else if (this.state.countdownMode === COUNTDOWN_BREAK_MODE)
-      {
-        this.setState({
-          countdownMode: COUNTDOWN_ACTIVITY_MODE,
-          countdownTime: ACTIVITY_TIME,
-          backgroundColor: '#ffdbb0'
-        })
-      }    
-      this.intervalID = setInterval(() => this.decreaseCountdownTime(), 1000)  
-      return
     }
 
-    this.setState(prevState => ({
-      countdownTime: prevState.countdownTime - 1
-    }))
+  onStartCountdown() {
+    this.intervalID = setInterval(() => this.onDecrementTimer(), 1000)
+    this.props.startCountdown()
   }
 
+  onStopCountdown() {
+    clearInterval(this.intervalID)
+    this.props.stopCountdown()
+  }
+
+  onDecrementTimer() {
+    this.props.decrementTimer()
+  }
+
+  onPauseCountdown() {
+    clearInterval(this.intervalID)
+    this.props.pauseCountdown()  
+  }
 
 
   render() {
-      let timerMode = (this.state.countdownMode === COUNTDOWN_ACTIVITY_MODE) ? "FOCUS" : "CHILL"
-      let formatedCountdownTime = new Date(this.state.countdownTime * 1000).toISOString().substr(14, 5);
+      let timerMode = (this.props.countdown.countdownMode === COUNTDOWN_ACTIVITY_MODE) ? "FOCUS" : "CHILL"
+      let formatedCountdownTime = new Date(this.props.countdown.countdownTime * 1000).toISOString().substr(14, 5);
 
       return (
-      <View style={{backgroundColor: this.state.backgroundColor}}>
+      <View style={{backgroundColor: this.props.countdown.backgroundColor}}>
         {/* timer countdown */}
         <View style={{alignItems: "center"}}>
-            <Text style={{fontSize: 40}}>{this.state.isCountdownRunning ? timerMode : 'WAITING'}</Text>
+            <Text style={{fontSize: 40}}>{this.props.countdown.isCountdownRunning ? timerMode : 'WAITING'}</Text>
             <Text style={{fontSize: 50}}>{formatedCountdownTime}</Text>
         </View>
         {/* timer buttons */}
         <View style={{flexDirection: "row", justifyContent: "space-evenly"}}>
-            {!this.state.isCountdownRunning && 
-              <Button success onPress={() => this.startCountdown()}>
+            {!this.props.countdown.isCountdownRunning && 
+              // <Button success onPress={() => this.startCountdown()}>
+              <Button success onPress={() => this.onStartCountdown()}>
                 <Text>START</Text>
               </Button>
             }
-            {this.state.isCountdownRunning && 
-              <Button info onPress={() => this.pauseCountdown()}>
+            {this.props.countdown.isCountdownRunning && 
+              <Button info onPress={() => this.onPauseCountdown()}>
                 <Text>PAUSE</Text>
               </Button>
             }
-            <Button warning onPress={() => this.stopCountdown()}>
+            <Button warning onPress={() => this.onStopCountdown()}>
               <Text>STOP</Text>
             </Button>
         </View>
@@ -113,4 +87,20 @@ class Countdown extends React.Component {
     }
 }
 
-export default Countdown;
+const mapStateToProps = state => {
+  return {
+      countdown: state.countdown,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+      startCountdown: () => dispatch(startCountdown()),
+      stopCountdown: () => dispatch(stopCountdown()),
+      pauseCountdown: () => dispatch(pauseCountdown()),
+      decrementTimer: () => dispatch(decrementTimer()),
+      toggleMode: (currentMode) => dispatch(toggleMode(currentMode))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Countdown);

@@ -3,7 +3,7 @@ export const ADD_TASK = 'ADD_TASK'
 export const DELETE_TASK = 'DELETE_TASK'
 export const TOGGLE_CHECKED = 'TOGGLE_CHECKED'
 
-// actions
+// action creators
 
 // adds new task with name from params and id, checked flag specified in tasksReducer
 export const addTask = name => {
