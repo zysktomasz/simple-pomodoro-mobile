@@ -1,17 +1,9 @@
 import React from 'react'
-import {View, Text, Button, StyleSheet} from 'react-native'
+import { View, Text, Button } from 'native-base'
 const ACTIVITY_TIME = 1200 // 20 min
 const BREAK_TIME = 300 // 5 min
 const COUNTDOWN_ACTIVITY_MODE = 'COUNTDOWN_ACTIVITY_MODE'
 const COUNTDOWN_BREAK_MODE = 'COUNTDOWN_BREAK_MODE'
-
-const styles = StyleSheet.create({
-    container: {
-      // flex: 1,
-      // justifyContent: 'center',
-      alignItems: 'center'
-    }
-})
 
 class Countdown extends React.Component {
     constructor(props) {
@@ -89,23 +81,35 @@ class Countdown extends React.Component {
 
 
 
-    render() {
-        let timerMode = (this.state.countdownMode === COUNTDOWN_ACTIVITY_MODE) ? "FOCUS" : "CHILL"
-        let formatedCountdownTime = new Date(this.state.countdownTime * 1000).toISOString().substr(14, 5);
+  render() {
+      let timerMode = (this.state.countdownMode === COUNTDOWN_ACTIVITY_MODE) ? "FOCUS" : "CHILL"
+      let formatedCountdownTime = new Date(this.state.countdownTime * 1000).toISOString().substr(14, 5);
 
-        return (
-        <View style={[styles.container, { backgroundColor: this.state.backgroundColor }]}>
+      return (
+      <View style={{backgroundColor: this.state.backgroundColor}}>
+        {/* timer countdown */}
+        <View style={{alignItems: "center"}}>
             <Text style={{fontSize: 40}}>{this.state.isCountdownRunning ? timerMode : 'WAITING'}</Text>
             <Text style={{fontSize: 50}}>{formatedCountdownTime}</Text>
-            <View style={{flexDirection: "row"}}>
-                {!this.state.isCountdownRunning && 
-                <Button onPress={() => this.startCountdown()} title="START" color="green" />}
-                {this.state.isCountdownRunning && 
-                <Button onPress={() => this.pauseCountdown()} title="PAUSE" color="blue" />}
-                <Button onPress={() => this.stopCountdown()} title="STOP" color="orange"/>
-            </View>
         </View>
-        )
+        {/* timer buttons */}
+        <View style={{flexDirection: "row", justifyContent: "space-evenly"}}>
+            {!this.state.isCountdownRunning && 
+              <Button success onPress={() => this.startCountdown()}>
+                <Text>START</Text>
+              </Button>
+            }
+            {this.state.isCountdownRunning && 
+              <Button info onPress={() => this.pauseCountdown()}>
+                <Text>PAUSE</Text>
+              </Button>
+            }
+            <Button warning onPress={() => this.stopCountdown()}>
+              <Text>STOP</Text>
+            </Button>
+        </View>
+      </View>
+      )
     }
 }
 

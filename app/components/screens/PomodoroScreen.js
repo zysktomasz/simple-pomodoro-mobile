@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Button } from "react-native";
+import { Container, Content, Button, Icon } from 'native-base'
 
 import Countdown from "../countdown/Countdown";
 import Tasks from "../tasks/Tasks";
@@ -8,16 +8,24 @@ class PomodoroScreen extends React.Component {
   static navigationOptions =  ({ navigation }) => {
     return {
       title: "Pomodoro",
-      headerRight: <Button title="settings" onPress={() => navigation.navigate('Settings')}/>
+      headerRight: (
+        <Button transparent
+            style={{marginTop: 7}}
+            onPress={() => navigation.navigate('Settings')}>
+            <Icon name='cog' style={{color: "black"}}/>
+        </Button>
+      )
     }
   };
 
   render() {
     return (
-      <View style={{ backgroundColor: "#F5FCFF", flex: 1 }}>
-        <Countdown />
-        <Tasks />
-      </View>
+      <Container>
+        <Content contentContainerStyle={{flex:1}}>
+          <Countdown />
+          <Tasks />
+        </Content>
+      </Container>
     );
   }
 }

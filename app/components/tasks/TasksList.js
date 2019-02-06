@@ -1,19 +1,11 @@
 import React from 'react'
-import {Text, StyleSheet, ScrollView, SectionList} from 'react-native'
+import {Text, SectionList} from 'react-native'
 import TasksSingleItem from './TasksSingleItem'
-
-const styles = StyleSheet.create({
-    scrollContainer: {
-        flex: 1,
-        marginBottom: 40
-    }
-})
 
 class TasksList extends React.Component {
     constructor(props) {
         super(props)
     }
-
 
     renderItem = ({item}) => (
         <TasksSingleItem
@@ -30,17 +22,15 @@ class TasksList extends React.Component {
 
     render() {
         return (
-            <ScrollView style={styles.scrollContainer}>
-                <SectionList
-                    renderItem={this.renderItem}
-                    renderSectionHeader={this.renderSection}
-                    sections={[
-                        {title: 'Todo', data: this.props.tasks.filter(task => !task.checked)},
-                        {title: 'Done', data: this.props.tasks.filter(task => task.checked)},
-                    ]}
-                    keyExtractor={(item, index) => item.id}
-                    />
-            </ScrollView>
+            <SectionList
+                renderItem={this.renderItem}
+                renderSectionHeader={this.renderSection}
+                sections={[
+                    {title: 'To do', data: this.props.tasks.filter(task => !task.checked)},
+                    {title: 'Done', data: this.props.tasks.filter(task => task.checked)},
+                ]}
+                keyExtractor={(item, index) => item + index}
+                />
         )
     }
 }

@@ -4,7 +4,16 @@ import { ADD_TASK, DELETE_TASK, TOGGLE_CHECKED } from './tasksActions'
 // tasks store cantains only array of tasks
 const initialState = {
     nextTaskId: 0,
-    tasksList: []
+    tasksList: [
+        {id: 1, name: "test", checked: false},
+        {id: 2, name: "test", checked: false},
+        {id: 3, name: "test", checked: false},
+        {id: 4, name: "test", checked: false},
+        {id: 5, name: "test", checked: false},
+        {id: 6, name: "test", checked: false},
+        {id: 7, name: "test", checked: false},
+        {id: 8, name: "testtesttesttesttesttesttest testtesttesttest testtest", checked: false},
+    ]
 }
 
 export default function tasksReducer(state = initialState, action) {

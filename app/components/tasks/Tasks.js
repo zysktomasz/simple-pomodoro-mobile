@@ -1,5 +1,6 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
+import { StyleSheet, TouchableOpacity, TextInput} from 'react-native'
+import { View, Text } from 'native-base'
 import { connect } from 'react-redux'
 import { addTask, toggleChecked, deleteTask } from './../../redux/tasksActions'
 
@@ -14,12 +15,12 @@ const styles = StyleSheet.create({
       addButton: {
         position: 'absolute',
         zIndex: 11,
-        right: 20,
-        bottom: 70,
+        right: 5,
+        bottom: 5,
         backgroundColor: '#E91E63',
-        width: 50,
+        width: 60,
         height: 50,
-        borderRadius: 25,
+        // borderRadius: 25,
         alignItems: 'center',
         justifyContent: 'center',
         elevation: 8
@@ -33,12 +34,10 @@ const styles = StyleSheet.create({
 class Tasks extends React.Component {
     constructor(props) {
         super(props)
-
         this.state = {
             taskText: null
         }
     }
-
 
     onAddTask() {
         if (this.state.taskText)
