@@ -3,6 +3,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation'
 
 // import redux-related stuff
 import { Provider } from 'react-redux';
+import { Root } from 'native-base'
 import store from './app/redux/store';
 
 import PomodoroScreen from './app/components/screens/PomodoroScreen'
@@ -24,9 +25,11 @@ const AppContainer = createAppContainer(AppNavigator);
 export default class App extends React.Component {
   render() {
     return (
-      <Provider store={store}>
-        <AppContainer />
-      </Provider>
+      <Root>
+        <Provider store={store}>
+          <AppContainer />
+        </Provider>
+      </Root>
     );
   }
 }

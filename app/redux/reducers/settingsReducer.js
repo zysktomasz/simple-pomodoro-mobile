@@ -1,5 +1,4 @@
 const initialState = {
-    
 }
 
 export default function settingsReducer(state = initialState, action) {
