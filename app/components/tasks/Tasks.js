@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity, TextInput} from 'react-native'
 import { View, Text } from 'native-base'
 import { connect } from 'react-redux'
-import { addTask, toggleChecked, deleteTask } from './../../redux/tasksActions'
+import { addTask, toggleChecked, deleteTask } from './../../redux/actions/tasksActions'
 
 import TasksList from './TasksList'
 

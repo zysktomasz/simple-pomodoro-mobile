@@ -5,34 +5,27 @@ import { View, Text, Button } from 'native-base'
 import { connect } from 'react-redux'
 import { startCountdown, stopCountdown, pauseCountdown, decrementTimer,
         toggleMode
-      } from './../../redux/countdownActions'
-
-
-const ACTIVITY_TIME = 1200 // 20 min
-const BREAK_TIME = 300 // 5 min
-const COUNTDOWN_ACTIVITY_MODE = 'COUNTDOWN_ACTIVITY_MODE'
-const COUNTDOWN_BREAK_MODE = 'COUNTDOWN_BREAK_MODE'
+      } from '../../redux/actions/countdownActions'
 
 class Countdown extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-    intervalID = null
+  constructor(props) {
+      super(props)
+  }
+  intervalID = null
 
-    componentWillReceiveProps(nextProps) {
-      // check if countdown got to 00:00
-      if (nextProps.countdown.countdownTime <= 0)
-      {
-        // stop currently running timer
-        clearInterval(this.intervalID)
-        // change countdown modes (sends currently running mode as parameter)
-        this.props.toggleMode(nextProps.countdown.countdownMode);
-        // start timer with updated mode
-        this.intervalID = setInterval(() => this.onDecrementTimer(), 1000)  
-
-        console.log("dupa")
-      }
+  componentWillReceiveProps(nextProps) {
+    // check if countdown got to 00:00
+    // if so, automatically switch between countdown modes (break vs activity)
+    if (nextProps.countdown.countdownTime <= 0)
+    {
+      // stop currently running timer
+      clearInterval(this.intervalID)
+      // change countdown modes (sends currently running mode as parameter)
+      this.props.toggleMode(nextProps.countdown.countdownMode);
+      // start timer with updated mode
+      this.intervalID = setInterval(() => this.onDecrementTimer(), 1000)  
     }
+  }
 
   onStartCountdown() {
     this.intervalID = setInterval(() => this.onDecrementTimer(), 1000)
@@ -55,7 +48,8 @@ class Countdown extends React.Component {
 
 
   render() {
-      let timerMode = (this.props.countdown.countdownMode === COUNTDOWN_ACTIVITY_MODE) ? "FOCUS" : "CHILL"
+      let timerMode = this.props.countdown.countdownMode
+      // let timerMode = (this.props.countdown.countdownMode === COUNTDOWN_ACTIVITY_MODE) ? "FOCUS" : "CHILL"
       let formatedCountdownTime = new Date(this.props.countdown.countdownTime * 1000).toISOString().substr(14, 5);
 
       return (

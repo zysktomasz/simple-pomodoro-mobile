@@ -1,8 +1,8 @@
 import { createStore, combineReducers } from 'redux'
 
-import countdownReducer from './countdownReducer'
-import tasksReducer from './tasksReducer'
-import settingsReducer from './settingsReducer'
+import countdownReducer from './reducers/countdownReducer'
+import tasksReducer from './reducers/tasksReducer'
+import settingsReducer from './reducers/settingsReducer'
 
 const allReducers = combineReducers({
     countdown: countdownReducer,

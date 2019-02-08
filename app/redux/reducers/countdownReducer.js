@@ -1,6 +1,6 @@
 // import countdown action types
 import { START_COUNTDOWN, STOP_COUNTDOWN, PAUSE_COUNTDOWN, DECREMENT_TIMER,
-            SWITCH_TO_ACTIVITY_MODE, SWITCH_TO_BREAK_MODE} from './countdownActions'
+            SWITCH_TO_ACTIVITY_MODE, SWITCH_TO_BREAK_MODE} from '../actions/countdownActions'
 
 
 const ACTIVITY_TIME = 3 // 20 min

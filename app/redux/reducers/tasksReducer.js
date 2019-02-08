@@ -1,5 +1,5 @@
 // import tasks' action types
-import { ADD_TASK, DELETE_TASK, TOGGLE_CHECKED } from './tasksActions'
+import { ADD_TASK, DELETE_TASK, TOGGLE_CHECKED } from '../actions/tasksActions'
 
 // tasks store cantains only array of tasks
 const initialState = {
@@ -8,11 +8,7 @@ const initialState = {
         {id: 1, name: "test", checked: false},
         {id: 2, name: "test", checked: false},
         {id: 3, name: "test", checked: false},
-        {id: 4, name: "test", checked: false},
-        {id: 5, name: "test", checked: false},
-        {id: 6, name: "test", checked: false},
-        {id: 7, name: "test", checked: false},
-        {id: 8, name: "testtesttesttesttesttesttest testtesttesttest testtest", checked: false},
+        {id: 4, name: "testtesttesttesttesttesttest testtesttesttest testtest", checked: false},
     ]
 }
 
