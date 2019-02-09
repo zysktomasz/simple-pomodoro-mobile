@@ -20,13 +20,12 @@ class Countdown extends React.Component {
     // if so, automatically switch between countdown modes (break vs activity)
     if (nextProps.countdown.countdownTime <= 0)
     {
-      // stop currently running timer
       clearInterval(this.intervalID)
       // change countdown modes (sends currently running mode as parameter)
+      // migh consider using thunk (and use getState inside action instead of parameter)
       this.props.toggleMode(nextProps.countdown.countdownMode);
       // start timer with updated mode
       this.intervalID = setInterval(() => this.onDecrementTimer(), 1000)  
-      console.log("SWITCH MODE")
     }
   }
 
@@ -49,6 +48,12 @@ class Countdown extends React.Component {
     this.props.pauseCountdown()  
   }
 
+  // skips any left time from current mode and starts countdown with next mdoe
+  skipSession() {
+    clearInterval(this.intervalID)
+    this.props.toggleMode(this.props.countdown.countdownMode);
+    this.onStartCountdown()
+  }
 
   render() {
       return (
@@ -58,9 +63,8 @@ class Countdown extends React.Component {
           countdownState={this.props.countdown}
         />
         {/* countdown buttons */}
-        <View style={{flexDirection: "row", justifyContent: "space-evenly"}}>
+        <View style={{flexDirection: "row", justifyContent: "space-evenly", marginTop: 20}}>
             {!this.props.countdown.isCountdownRunning && 
-              // <Button success onPress={() => this.startCountdown()}>
               <Button success onPress={() => this.onStartCountdown()}>
                 <Text>START</Text>
               </Button>
@@ -73,6 +77,11 @@ class Countdown extends React.Component {
             <Button warning onPress={() => this.onStopCountdown()}>
               <Text>STOP</Text>
             </Button>
+            {this.props.countdown.isCountdownRunning && 
+              <Button info onPress={() => this.skipSession()}>
+                <Text>SKIP</Text>
+              </Button>
+            }
         </View>
       </View>
       )
