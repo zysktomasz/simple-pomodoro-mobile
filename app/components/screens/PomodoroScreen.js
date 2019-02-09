@@ -25,9 +25,9 @@ class PomodoroScreen extends React.Component {
   };
 
   componentDidMount() {
-    this.props.updateTimes(3, 5)
-    this._saveSettingsFromStateToStorage(3, 5)
-    // this._loadSettingsFromAsyncStorage()
+    // this.props.updateTimes(3, 5)
+    // this._saveSettingsFromStateToStorage(3, 5)
+    this._loadSettingsFromAsyncStorage()
   }
 
   _loadSettingsFromAsyncStorage = async () => {

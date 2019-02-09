@@ -6,7 +6,7 @@ import CircularCountdown from './CircularCountdown'
 // redux related stuff
 import { connect } from 'react-redux'
 import { startCountdown, stopCountdown, pauseCountdown, decrementTimer,
-        toggleMode
+        toggleMode, updateTimeBy60Seconds
       } from '../../redux/actions/countdownActions'
 
 class Countdown extends React.Component {
@@ -55,9 +55,38 @@ class Countdown extends React.Component {
     this.onStartCountdown()
   }
 
+  // TODO
+  // TODO : zrobic to jakos madrzej
+  // TODO
+  updateTimeBy60Seconds(operation) {
+    let minSeconds = 1
+    let maxSeconds = (this.props.countdown.countdownMode === "focus") ? this.props.countdown.activityTime : this.props.countdown.breakTime
+    // if operation possible
+    if (operation === "minus" && this.props.countdown.countdownTime - 60 >= minSeconds)
+    {
+      this.props.updateTimeBy60Seconds("minus")
+    }
+    else if (operation === "plus" && this.props.countdown.countdownTime + 60 <=  maxSeconds)
+    {
+      this.props.updateTimeBy60Seconds("plus")
+    }
+  }
+
   render() {
       return (
       <View>
+        <View style={{flexDirection: "row", justifyContent: "center"}}>
+                    <Button 
+                      style={{position: "absolute", left: 70}}
+                      transparent onPress={() => this.updateTimeBy60Seconds("minus")}>
+                        <Text>-60s</Text>
+                    </Button>
+                    <Button 
+                      style={{position: "absolute", right: 70}}
+                      transparent onPress={() => this.updateTimeBy60Seconds("plus")}>
+                        <Text>+60s</Text>
+                    </Button>
+                </View>
         {/* timer countdown */}
         <CircularCountdown 
           countdownState={this.props.countdown}
@@ -102,7 +131,8 @@ const mapDispatchToProps = dispatch => {
       stopCountdown: () => dispatch(stopCountdown()),
       pauseCountdown: () => dispatch(pauseCountdown()),
       decrementTimer: () => dispatch(decrementTimer()),
-      toggleMode: (currentMode) => dispatch(toggleMode(currentMode))
+      toggleMode: (currentMode) => dispatch(toggleMode(currentMode)),
+      updateTimeBy60Seconds: (operation) => dispatch(updateTimeBy60Seconds(operation))
   }
 }
 

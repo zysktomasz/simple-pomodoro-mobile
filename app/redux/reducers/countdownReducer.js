@@ -1,6 +1,7 @@
 // import countdown action types
 import { START_COUNTDOWN, STOP_COUNTDOWN, PAUSE_COUNTDOWN, DECREMENT_TIMER,
-            SWITCH_TO_ACTIVITY_MODE, SWITCH_TO_BREAK_MODE, UPDATE_TIMES} from '../actions/countdownActions'
+            SWITCH_TO_ACTIVITY_MODE, SWITCH_TO_BREAK_MODE, UPDATE_TIMES,
+            UPDATE_TIME_BY_60_SECONDS} from '../actions/countdownActions'
 
 
 const COUNTDOWN_ACTIVITY_MODE = 'focus'
@@ -18,6 +19,11 @@ const initialState = {
 
 export default function countdownReducer(state = initialState, action) {
     switch(action.type) {
+        case UPDATE_TIME_BY_60_SECONDS:
+            return {
+                ...state,
+                countdownTime: (action.payload.operation === "minus") ? state.countdownTime - 60 : state.countdownTime + 60
+            }
         case UPDATE_TIMES:
             return {
                 ...state,
