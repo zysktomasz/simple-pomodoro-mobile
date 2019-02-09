@@ -1,5 +1,5 @@
-const COUNTDOWN_ACTIVITY_MODE = 'COUNTDOWN_ACTIVITY_MODE'
-const COUNTDOWN_BREAK_MODE = 'COUNTDOWN_BREAK_MODE'
+const COUNTDOWN_ACTIVITY_MODE = 'focus'
+const COUNTDOWN_BREAK_MODE = 'chill'
 
 // actions types
 export const START_COUNTDOWN = 'START_COUNTDOWN'
@@ -49,7 +49,6 @@ export const decrementTimer = () => {
 }
 
 export const toggleMode = (currentMode) => {
-    console.log("currentMode", currentMode)
     let type = (currentMode === COUNTDOWN_ACTIVITY_MODE) ? SWITCH_TO_BREAK_MODE : SWITCH_TO_ACTIVITY_MODE
     return {
         type

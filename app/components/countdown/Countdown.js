@@ -1,6 +1,8 @@
 import React from 'react'
 import { View, Text, Button } from 'native-base'
 
+import CircularCountdown from './CircularCountdown'
+
 // redux related stuff
 import { connect } from 'react-redux'
 import { startCountdown, stopCountdown, pauseCountdown, decrementTimer,
@@ -24,6 +26,7 @@ class Countdown extends React.Component {
       this.props.toggleMode(nextProps.countdown.countdownMode);
       // start timer with updated mode
       this.intervalID = setInterval(() => this.onDecrementTimer(), 1000)  
+      console.log("SWITCH MODE")
     }
   }
 
@@ -48,18 +51,13 @@ class Countdown extends React.Component {
 
 
   render() {
-      let timerMode = this.props.countdown.countdownMode
-      // let timerMode = (this.props.countdown.countdownMode === COUNTDOWN_ACTIVITY_MODE) ? "FOCUS" : "CHILL"
-      let formatedCountdownTime = new Date(this.props.countdown.countdownTime * 1000).toISOString().substr(14, 5);
-
       return (
-      <View style={{backgroundColor: this.props.countdown.backgroundColor}}>
+      <View>
         {/* timer countdown */}
-        <View style={{alignItems: "center"}}>
-            <Text style={{fontSize: 40}}>{this.props.countdown.isCountdownRunning ? timerMode : 'WAITING'}</Text>
-            <Text style={{fontSize: 50}}>{formatedCountdownTime}</Text>
-        </View>
-        {/* timer buttons */}
+        <CircularCountdown 
+          countdownState={this.props.countdown}
+        />
+        {/* countdown buttons */}
         <View style={{flexDirection: "row", justifyContent: "space-evenly"}}>
             {!this.props.countdown.isCountdownRunning && 
               // <Button success onPress={() => this.startCountdown()}>
@@ -80,6 +78,8 @@ class Countdown extends React.Component {
       )
     }
 }
+
+
 
 const mapStateToProps = state => {
   return {

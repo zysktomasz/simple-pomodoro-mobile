@@ -3,10 +3,8 @@ import { START_COUNTDOWN, STOP_COUNTDOWN, PAUSE_COUNTDOWN, DECREMENT_TIMER,
             SWITCH_TO_ACTIVITY_MODE, SWITCH_TO_BREAK_MODE, UPDATE_TIMES} from '../actions/countdownActions'
 
 
-const ACTIVITY_TIME = 3 // 20 min
-const BREAK_TIME = 3 // 5 min
-const COUNTDOWN_ACTIVITY_MODE = 'COUNTDOWN_ACTIVITY_MODE'
-const COUNTDOWN_BREAK_MODE = 'COUNTDOWN_BREAK_MODE'
+const COUNTDOWN_ACTIVITY_MODE = 'focus'
+const COUNTDOWN_BREAK_MODE = 'chill'
 
 const initialState = {
     // default values
@@ -15,7 +13,7 @@ const initialState = {
     isCountdownRunning: false,
     countdownMode: COUNTDOWN_ACTIVITY_MODE,
     countdownTime: 0,
-    backgroundColor: '#F5FCFF'
+    wheelColor: 'orange'
 }
 
 export default function countdownReducer(state = initialState, action) {
@@ -31,7 +29,7 @@ export default function countdownReducer(state = initialState, action) {
             return {
                 ...state,
                 isCountdownRunning: true,
-                backgroundColor: (state.countdownMode === COUNTDOWN_ACTIVITY_MODE) ? '#ffdbb0' : 'green'
+                wheelColor: (state.countdownMode === COUNTDOWN_ACTIVITY_MODE) ? 'orange' : 'green'
             }
         case STOP_COUNTDOWN:
             return {
@@ -39,7 +37,7 @@ export default function countdownReducer(state = initialState, action) {
                 isCountdownRunning: false,
                 countdownMode: COUNTDOWN_ACTIVITY_MODE,
                 countdownTime: state.activityTime,
-                backgroundColor: '#F5FCFF'
+                wheelColor: 'orange'
             }
         case PAUSE_COUNTDOWN:
             return {
@@ -51,14 +49,14 @@ export default function countdownReducer(state = initialState, action) {
                 ...state,
                 countdownMode: COUNTDOWN_ACTIVITY_MODE,
                 countdownTime: state.activityTime,
-                backgroundColor: '#ffdbb0'
+                wheelColor: 'orange'
             }
         case SWITCH_TO_BREAK_MODE:
             return {
                 ...state,
                 countdownMode: COUNTDOWN_BREAK_MODE,
                 countdownTime: state.breakTime,
-                backgroundColor: 'green'
+                wheelColor: 'green'
             }
         case DECREMENT_TIMER:
             return {
