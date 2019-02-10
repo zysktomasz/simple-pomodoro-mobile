@@ -22,7 +22,7 @@ export default function countdownReducer(state = initialState, action) {
         case UPDATE_TIME_BY_60_SECONDS:
             return {
                 ...state,
-                countdownTime: (action.payload.operation === "minus") ? state.countdownTime - 60 : state.countdownTime + 60
+                countdownTime: action.payload.newCountdownTime
             }
         case UPDATE_TIMES:
             return {

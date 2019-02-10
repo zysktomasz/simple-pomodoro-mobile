@@ -57,11 +57,11 @@ export const toggleMode = (currentMode) => {
     }
 }
 
-export const updateTimeBy60Seconds = (operation) => {
+export const updateTimeBy60Seconds = (newCountdownTime) => {
     return {
         type: UPDATE_TIME_BY_60_SECONDS,
         payload: {
-            operation
+            newCountdownTime
         }
     }
 }

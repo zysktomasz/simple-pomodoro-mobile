@@ -55,43 +55,48 @@ class Countdown extends React.Component {
     this.onStartCountdown()
   }
 
-  // TODO
-  // TODO : zrobic to jakos madrzej
-  // TODO
+  // based on operation ("minus" or "plus") calculates new countdownTime
+  // countdownTime is restricted between 1s and maxSeconds for current countdown mode
   updateTimeBy60Seconds(operation) {
     let minSeconds = 1
     let maxSeconds = (this.props.countdown.countdownMode === "focus") ? this.props.countdown.activityTime : this.props.countdown.breakTime
+    let currentCountdownTime = this.props.countdown.countdownTime
     // if operation possible
-    if (operation === "minus" && this.props.countdown.countdownTime - 60 >= minSeconds)
+    if (operation === "minus")
     {
-      this.props.updateTimeBy60Seconds("minus")
+      newCountdownTime = (currentCountdownTime - 60 >= minSeconds) ? currentCountdownTime - 60 : minSeconds
+      this.props.updateTimeBy60Seconds(newCountdownTime)
     }
-    else if (operation === "plus" && this.props.countdown.countdownTime + 60 <=  maxSeconds)
+    else if (operation === "plus")
     {
-      this.props.updateTimeBy60Seconds("plus")
+      newCountdownTime = (currentCountdownTime + 60 <= maxSeconds) ? currentCountdownTime + 60 : maxSeconds
+      this.props.updateTimeBy60Seconds(newCountdownTime)
     }
   }
 
   render() {
       return (
       <View>
+        {/* countdown buttons - +/- 60s to countdown time */}
         <View style={{flexDirection: "row", justifyContent: "center"}}>
-                    <Button 
-                      style={{position: "absolute", left: 70}}
-                      transparent onPress={() => this.updateTimeBy60Seconds("minus")}>
-                        <Text>-60s</Text>
-                    </Button>
-                    <Button 
-                      style={{position: "absolute", right: 70}}
-                      transparent onPress={() => this.updateTimeBy60Seconds("plus")}>
-                        <Text>+60s</Text>
-                    </Button>
-                </View>
+            <Button 
+              style={{position: "absolute", left: 60, top: 10}}
+              rounded light
+              onPress={() => this.updateTimeBy60Seconds("minus")}>
+                <Text style={{fontSize: 11}}>-60s</Text>
+            </Button>
+            <Button 
+              style={{position: "absolute", right: 60, top: 10}}
+              rounded light
+              onPress={() => this.updateTimeBy60Seconds("plus")}>
+                <Text style={{fontSize: 11}}>+60s</Text>
+            </Button>
+        </View>
         {/* timer countdown */}
         <CircularCountdown 
           countdownState={this.props.countdown}
         />
-        {/* countdown buttons */}
+        {/* countdown buttons - start/stop/skip*/}
         <View style={{flexDirection: "row", justifyContent: "space-evenly", marginTop: 20}}>
             {!this.props.countdown.isCountdownRunning && 
               <Button success onPress={() => this.onStartCountdown()}>
@@ -106,11 +111,12 @@ class Countdown extends React.Component {
             <Button warning onPress={() => this.onStopCountdown()}>
               <Text>STOP</Text>
             </Button>
-            {this.props.countdown.isCountdownRunning && 
-              <Button info onPress={() => this.skipSession()}>
-                <Text>SKIP</Text>
-              </Button>
-            }
+            <Button
+              info onPress={() => this.skipSession()}
+              disabled={!this.props.countdown.isCountdownRunning}  
+            >
+              <Text>SKIP</Text>
+            </Button>
         </View>
       </View>
       )
@@ -132,7 +138,7 @@ const mapDispatchToProps = dispatch => {
       pauseCountdown: () => dispatch(pauseCountdown()),
       decrementTimer: () => dispatch(decrementTimer()),
       toggleMode: (currentMode) => dispatch(toggleMode(currentMode)),
-      updateTimeBy60Seconds: (operation) => dispatch(updateTimeBy60Seconds(operation))
+      updateTimeBy60Seconds: (newCountdownTime) => dispatch(updateTimeBy60Seconds(newCountdownTime))
   }
 }
 
