@@ -1,27 +1,32 @@
 import React from 'react';
-import { Container, Content, Text, Card, CardItem, Body, Item, Label, Button, Picker, Toast } from 'native-base'
+import { Container, Content, Text, Card, CardItem, Body, Item, Label, Button, Picker, Toast, CheckBox, ListItem } from 'native-base'
 
 import {AsyncStorage} from 'react-native';
 
 // redux related stuff
 import { connect } from 'react-redux'
 import { updateTimes } from '../../redux/actions/countdownActions'
+import { updateSettings } from '../../redux/actions/settingsActions'
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
     title: "Settings",
   }
 
-  // holds state of selected time values for each timer
+  // holds current state of settings
+  // - selected time values for each timer
+  // - playSoundOnCountdownEnd boolean flag
   state = {
     activityTimePicked: '',
     breakTimePicked: '',
+    playSoundOnCountdownEndPicked: true
   }
 
   componentDidMount() {
     this.setState({ 
       activityTimePicked: (this.props.countdown.activityTime / 60).toString(),
-      breakTimePicked: (this.props.countdown.breakTime / 60).toString()
+      breakTimePicked: (this.props.countdown.breakTime / 60).toString(),
+      playSoundOnCountdownEndPicked: this.props.settings.playSoundOnCountdownEnd
     })
   }
 
@@ -36,10 +41,16 @@ class SettingsScreen extends React.Component {
   }
 
   onSaveSettings() {
+    // values of updates fields
     let activityTime = parseInt(this.state.activityTimePicked, 10) * 60
     let breakTime = parseInt(this.state.breakTimePicked, 10) * 60
-    this._saveSettingsFromStateToStorage(activityTime, breakTime)
+    let playSoundOnCountdownEnd = this.state.playSoundOnCountdownEndPicked
+
+    this._saveSettingsFromStateToStorage(activityTime, breakTime, playSoundOnCountdownEnd)
+      // updates Activity and Break Times in store.countdown
       .then(() => this.props.updateTimes(activityTime, breakTime))
+      // updates playSoundOnCountdownEnd flag in store.settings
+      .then(() => this.props.updateSettings(playSoundOnCountdownEnd))
       .then(() => Toast.show({
                     text: "Updated settings!",
                     buttonText: "cool",
@@ -47,10 +58,11 @@ class SettingsScreen extends React.Component {
                   }))
   }
 
-  _saveSettingsFromStateToStorage = async (activityTime, breakTime) => {
+  _saveSettingsFromStateToStorage = async (activityTime, breakTime, playSoundOnCountdownEnd) => {
     try {
       await AsyncStorage.setItem('activityTime', activityTime.toString());
       await AsyncStorage.setItem('breakTime', breakTime.toString());
+      await AsyncStorage.setItem('playSoundOnCountdownEnd', playSoundOnCountdownEnd.toString())
       console.log("saved data to storage")
     } catch (error) {
       console.log(error)
@@ -58,11 +70,12 @@ class SettingsScreen extends React.Component {
   };
 
   render() {
-
     return (  
       <Container>
         <Content contentContainerStyle={{flex:1}} padder>
-          <Card style={{flex: 1}}>
+          <Card 
+            // style={{flex: 1}}
+          >
             <CardItem>
               <Body>
                 {/* Activity Time PICKER */}
@@ -96,9 +109,21 @@ class SettingsScreen extends React.Component {
                   <Label>Break Time</Label>
                 </Item>
                 <Text style={{fontSize: 12, fontStyle: "italic"}}>Setup time for break countdown (1-59 min)</Text>
+
               </Body>
             </CardItem>
+            {/* play sound on countdown switch flag */}
+            <ListItem>
+              <CheckBox 
+                checked={this.state.playSoundOnCountdownEndPicked}
+                onPress={() => this.setState({playSoundOnCountdownEndPicked: !this.state.playSoundOnCountdownEndPicked})}
+              />
+              <Body>
+                <Text>Play notification song on countdown's end</Text>
+              </Body>
+            </ListItem>
           </Card>
+              {/* save settings button */}
           <Button block onPress={() => this.onSaveSettings()}>
             <Text>Save settings</Text>
           </Button>
@@ -120,6 +145,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
       updateTimes: (activityTime, breakTime) => dispatch(updateTimes(activityTime, breakTime)),
+      updateSettings: (playSoundOnCountdownEnd) => dispatch(updateSettings(playSoundOnCountdownEnd))
   }
 }
 

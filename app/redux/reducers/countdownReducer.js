@@ -13,7 +13,7 @@ const initialState = {
     breakTime: 300,
     isCountdownRunning: false,
     countdownMode: COUNTDOWN_ACTIVITY_MODE,
-    countdownTime: 0,
+    countdownTime: 1200,
     wheelColor: 'orange'
 }
 

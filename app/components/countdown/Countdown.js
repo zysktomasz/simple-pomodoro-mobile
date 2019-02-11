@@ -9,11 +9,20 @@ import { startCountdown, stopCountdown, pauseCountdown, decrementTimer,
         toggleMode, updateTimeBy60Seconds
       } from '../../redux/actions/countdownActions'
 
+import Sound from 'react-native-sound'
+
 class Countdown extends React.Component {
   constructor(props) {
       super(props)
+
+      Sound.setCategory('Playback')
+
   }
   intervalID = null
+  countdownSwitchSound = new Sound('countdown_switch.mp3', Sound.MAIN_BUNDLE, (error) => {
+    if(error)
+      console.log("error", error)
+  })
 
   componentWillReceiveProps(nextProps) {
     // check if countdown got to 00:00
@@ -25,7 +34,12 @@ class Countdown extends React.Component {
       // migh consider using thunk (and use getState inside action instead of parameter)
       this.props.toggleMode(nextProps.countdown.countdownMode);
       // start timer with updated mode
-      this.intervalID = setInterval(() => this.onDecrementTimer(), 1000)  
+      this.intervalID = setInterval(() => this.onDecrementTimer(), 1000) 
+      // play notification sound
+      if (this.props.settings.playSoundOnCountdownEnd)
+      {
+        this.countdownSwitchSound.play() 
+      }
     }
   }
 
@@ -75,6 +89,7 @@ class Countdown extends React.Component {
   }
 
   render() {
+    console.log("Countdown.js this.props.settings", this.props.settings)
       return (
       <View>
         {/* countdown buttons - +/- 60s to countdown time */}
@@ -127,6 +142,7 @@ class Countdown extends React.Component {
 
 const mapStateToProps = state => {
   return {
+      settings: state.settings,
       countdown: state.countdown,
   }
 }

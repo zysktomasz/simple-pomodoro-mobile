@@ -9,6 +9,8 @@ import {AsyncStorage} from 'react-native';
 // redux related stuff
 import { connect } from 'react-redux'
 import { updateTimes } from '../../redux/actions/countdownActions'
+import { updateSettings } from '../../redux/actions/settingsActions'
+
 
 class PomodoroScreen extends React.Component {
   static navigationOptions =  ({ navigation }) => {
@@ -30,33 +32,43 @@ class PomodoroScreen extends React.Component {
     this._loadSettingsFromAsyncStorage()
   }
 
+  // poorly written, should fix
   _loadSettingsFromAsyncStorage = async () => {
     try {
       const activityTime = await AsyncStorage.getItem('activityTime');
       const breakTime = await AsyncStorage.getItem('breakTime');
-      if (activityTime !== null && breakTime !== null) {
+      const playSoundOnCountdownEnd = await AsyncStorage.getItem('playSoundOnCountdownEnd');
+      if (activityTime !== null && breakTime !== null && playSoundOnCountdownEnd !== null) {
         // if we have data stored in asyncstorage, load it into redux state
-        console.log("received data from storage, saving it into state")
         this.props.updateTimes(activityTime, breakTime)
+
+        // converts string to boolean
+        this.props.updateSettings((playSoundOnCountdownEnd == 'true'))
+        console.log("received data from storage, saving it into state")
         console.log("activityTime", activityTime);
         console.log("breakTime", breakTime);
+        console.log("playSoundOnCountdownEnd", playSoundOnCountdownEnd)
       }
       else
       {
         // if no data retrieved from storage -> get default data from redux state and
         // save it into storage
         console.log("no data in storage, saving default from state")
-        this._saveSettingsFromStateToStorage(this.props.settings.activityTime, this.props.settings.breakTime)        
+        this._saveSettingsFromStateToStorage(
+          this.props.countdown.activityTime, 
+          this.props.countdown.breakTime, 
+          this.props.settings.playSoundOnCountdownEnd)        
       }
     } catch (error) {
       console.log(error)
     }
   };
 
-  _saveSettingsFromStateToStorage = async (activityTime, breakTime) => {
+  _saveSettingsFromStateToStorage = async (activityTime, breakTime, playSoundOnCountdownEnd) => {
     try {
       await AsyncStorage.setItem('activityTime', activityTime.toString());
       await AsyncStorage.setItem('breakTime', breakTime.toString());
+      await AsyncStorage.setItem('playSoundOnCountdownEnd', playSoundOnCountdownEnd.toString())
       console.log("saved data to storage")
     } catch (error) {
       console.log(error)
@@ -79,6 +91,7 @@ class PomodoroScreen extends React.Component {
 
 const mapStateToProps = state => {
   return {
+      settings: state.settings,
       countdown: state.countdown,
   }
 }
@@ -86,6 +99,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
       updateTimes: (activityTime, breakTime) => dispatch(updateTimes(activityTime, breakTime)),
+      updateSettings: (playSoundOnCountdownEnd) => dispatch(updateSettings(playSoundOnCountdownEnd))
   }
 }
 
