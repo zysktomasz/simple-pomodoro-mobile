@@ -1,11 +1,12 @@
 import {AsyncStorage} from 'react-native';
 
 // saves data from parameters (redux store) to async storage
-export const _saveSettingsFromStateToStorage = async (activityTime, breakTime, playSoundOnCountdownEnd) => {
+export const _saveSettingsFromStateToStorage = async (activityTime, breakTime, playSoundOnCountdownEnd, playSoundOnCountdownLastTicks) => {
     try {
       await AsyncStorage.setItem('activityTime', activityTime.toString());
       await AsyncStorage.setItem('breakTime', breakTime.toString());
       await AsyncStorage.setItem('playSoundOnCountdownEnd', playSoundOnCountdownEnd.toString())
+      await AsyncStorage.setItem('playSoundOnCountdownEnd', playSoundOnCountdownLastTicks.toString())
       console.log("saved data to storage")
     } catch (error) {
       console.log(error)
@@ -21,11 +22,14 @@ export const  _loadSettingsFromAsyncStorage = async () => {
         const activityTime = await AsyncStorage.getItem('activityTime');
         const breakTime = await AsyncStorage.getItem('breakTime');
         const playSoundOnCountdownEnd = await AsyncStorage.getItem('playSoundOnCountdownEnd');
-        if (activityTime !== null || breakTime !== null || playSoundOnCountdownEnd !== null) {
+        const playSoundOnCountdownLastTicks = await AsyncStorage.getItem('playSoundOnCountdownLastTicks');
+        if (activityTime !== null || breakTime !== null || playSoundOnCountdownEnd !== null
+            || playSoundOnCountdownLastTicks !== null) {
             return {
                 activityTime,
                 breakTime,
-                playSoundOnCountdownEnd
+                playSoundOnCountdownEnd,
+                playSoundOnCountdownLastTicks
             }
         }
         else

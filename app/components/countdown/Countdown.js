@@ -24,6 +24,11 @@ class Countdown extends React.Component {
       console.log("error", error)
   })
 
+  singleClockTickSound = new Sound("single_clock_tick.mp3", Sound.MAIN_BUNDLE, (error) => {
+    if(error)
+      console.log("error", error)
+  })
+
   componentWillReceiveProps(nextProps) {
     // check if countdown got to 00:00
     // if so, automatically switch between countdown modes (break vs activity)
@@ -109,6 +114,8 @@ class Countdown extends React.Component {
         {/* timer countdown */}
         <CircularCountdown 
           countdownState={this.props.countdown}
+          singleClockTickSound={this.singleClockTickSound}
+          playClockTickSound={this.props.settings.playSoundOnCountdownLastTicks}
         />
         {/* countdown buttons - start/stop/skip*/}
         <View style={{flexDirection: "row", justifyContent: "space-evenly", marginTop: 20}}>

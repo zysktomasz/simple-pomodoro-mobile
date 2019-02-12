@@ -35,13 +35,17 @@ class PomodoroScreen extends React.Component {
           // if we have data stored in asyncstorage, load it into redux state
           this.props.updateTimes(settingsFromStorage.activityTime, settingsFromStorage.breakTime)
           // converts string flag received from storage to boolean
-          this.props.updateSettings((settingsFromStorage.playSoundOnCountdownEnd == 'true'))
+          this.props.updateSettings(
+            (settingsFromStorage.playSoundOnCountdownEnd == 'true'),
+            (settingsFromStorage.playSoundOnCountdownLastTicks == 'true')
+          )
         } 
         else {
           _saveSettingsFromStateToStorage(
             this.props.countdown.activityTime, 
             this.props.countdown.breakTime, 
-            this.props.settings.playSoundOnCountdownEnd)
+            this.props.settings.playSoundOnCountdownEnd,
+            this.props.settings.playSoundOnCountdownLastTicks)
         }
       })
   }
@@ -70,7 +74,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
       updateTimes: (activityTime, breakTime) => dispatch(updateTimes(activityTime, breakTime)),
-      updateSettings: (playSoundOnCountdownEnd) => dispatch(updateSettings(playSoundOnCountdownEnd))
+      updateSettings: (playSoundOnCountdownEnd, playSoundOnCountdownLastTicks) => 
+        dispatch(updateSettings(playSoundOnCountdownEnd, playSoundOnCountdownLastTicks))
   }
 }
 

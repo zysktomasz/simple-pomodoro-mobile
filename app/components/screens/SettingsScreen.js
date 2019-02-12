@@ -20,14 +20,16 @@ class SettingsScreen extends React.Component {
   state = {
     activityTimePicked: '',
     breakTimePicked: '',
-    playSoundOnCountdownEndPicked: true
+    playSoundOnCountdownEndPicked: true,
+    playSoundOnCountdownLastTicksPicked: true,
   }
 
   componentDidMount() {
     this.setState({ 
       activityTimePicked: (this.props.countdown.activityTime / 60).toString(),
       breakTimePicked: (this.props.countdown.breakTime / 60).toString(),
-      playSoundOnCountdownEndPicked: this.props.settings.playSoundOnCountdownEnd
+      playSoundOnCountdownEndPicked: this.props.settings.playSoundOnCountdownEnd,
+      playSoundOnCountdownLastTicksPicked: this.props.settings.playSoundOnCountdownLastTicks
     })
   }
 
@@ -46,12 +48,13 @@ class SettingsScreen extends React.Component {
     let activityTime = parseInt(this.state.activityTimePicked, 10) * 60
     let breakTime = parseInt(this.state.breakTimePicked, 10) * 60
     let playSoundOnCountdownEnd = this.state.playSoundOnCountdownEndPicked
+    let playSoundOnCountdownLastTicks = this.state.playSoundOnCountdownLastTicksPicked
 
-    _saveSettingsFromStateToStorage(activityTime, breakTime, playSoundOnCountdownEnd)
+    _saveSettingsFromStateToStorage(activityTime, breakTime, playSoundOnCountdownEnd, playSoundOnCountdownLastTicks)
       // updates Activity and Break Times in store.countdown
       .then(() => this.props.updateTimes(activityTime, breakTime))
       // updates playSoundOnCountdownEnd flag in store.settings
-      .then(() => this.props.updateSettings(playSoundOnCountdownEnd))
+      .then(() => this.props.updateSettings(playSoundOnCountdownEnd, playSoundOnCountdownLastTicks))
       .then(() => Toast.show({
                     text: "Updated settings!",
                     buttonText: "cool",
@@ -112,6 +115,16 @@ class SettingsScreen extends React.Component {
                 <Text>Play notification song on countdown's end</Text>
               </Body>
             </ListItem>
+            {/* play sound on countdown's last 5 seconds switch flag */}
+            <ListItem>
+              <CheckBox 
+                checked={this.state.playSoundOnCountdownLastTicksPicked}
+                onPress={() => this.setState({playSoundOnCountdownLastTicksPicked: !this.state.playSoundOnCountdownLastTicksPicked})}
+              />
+              <Body>
+                <Text>Play clock tick sound on countdown's last 5 seconds</Text>
+              </Body>
+            </ListItem>
           </Card>
               {/* save settings button */}
           <Button block onPress={() => this.onSaveSettings()}>
@@ -135,7 +148,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
       updateTimes: (activityTime, breakTime) => dispatch(updateTimes(activityTime, breakTime)),
-      updateSettings: (playSoundOnCountdownEnd) => dispatch(updateSettings(playSoundOnCountdownEnd))
+      updateSettings: (playSoundOnCountdownEnd, playSoundOnCountdownLastTicks) => 
+        dispatch(updateSettings(playSoundOnCountdownEnd, playSoundOnCountdownLastTicks))
   }
 }
 

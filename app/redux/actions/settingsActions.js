@@ -1,10 +1,11 @@
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 
-export const updateSettings = (playSoundOnCountdownEnd) => {
+export const updateSettings = (playSoundOnCountdownEnd, playSoundOnCountdownLastTicks) => {
     return {
         type: UPDATE_SETTINGS,
         payload: {
-            playSoundOnCountdownEnd: playSoundOnCountdownEnd
+            playSoundOnCountdownEnd,
+            playSoundOnCountdownLastTicks
         }
     }
 }

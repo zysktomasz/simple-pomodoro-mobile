@@ -1,7 +1,8 @@
 import { UPDATE_SETTINGS } from '../actions/settingsActions'
 
 const initialState = {
-    playSoundOnCountdownEnd: true
+    playSoundOnCountdownEnd: true,
+    playSoundOnCountdownLastTicks: true
 }
 
 export default function settingsReducer(state = initialState, action) {
@@ -9,7 +10,8 @@ export default function settingsReducer(state = initialState, action) {
         case UPDATE_SETTINGS:
             return {
                 ...state,
-                playSoundOnCountdownEnd: action.payload.playSoundOnCountdownEnd
+                playSoundOnCountdownEnd: action.payload.playSoundOnCountdownEnd,
+                playSoundOnCountdownLastTicks: action.payload.playSoundOnCountdownLastTicks
             }
         default: 
             return state;

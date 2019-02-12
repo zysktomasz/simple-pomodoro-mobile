@@ -3,6 +3,7 @@ import { View, Text } from 'native-base'
 import { StyleSheet } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
+
 class CircularCountdown extends React.Component {
     constructor(props) {
         super(props)
@@ -24,6 +25,10 @@ class CircularCountdown extends React.Component {
                     tintColor={this.props.countdownState.wheelColor}
                     backgroundColor="#C6CCCF"
                     lineCap="square"
+                    onAnimationComplete={() => {
+                        if(this.props.playClockTickSound && this.props.countdownState.countdownTime <= 5)
+                            this.props.singleClockTickSound.play()
+                    }}
                 >
                     {() =>
                     <View>
