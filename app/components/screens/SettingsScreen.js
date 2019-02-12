@@ -1,7 +1,8 @@
 import React from 'react';
 import { Container, Content, Text, Card, CardItem, Body, Item, Label, Button, Picker, Toast, CheckBox, ListItem } from 'native-base'
 
-import {AsyncStorage} from 'react-native';
+// imports method related to storing state in async storage
+import { _saveSettingsFromStateToStorage } from '../../asyncstorage'
 
 // redux related stuff
 import { connect } from 'react-redux'
@@ -46,7 +47,7 @@ class SettingsScreen extends React.Component {
     let breakTime = parseInt(this.state.breakTimePicked, 10) * 60
     let playSoundOnCountdownEnd = this.state.playSoundOnCountdownEndPicked
 
-    this._saveSettingsFromStateToStorage(activityTime, breakTime, playSoundOnCountdownEnd)
+    _saveSettingsFromStateToStorage(activityTime, breakTime, playSoundOnCountdownEnd)
       // updates Activity and Break Times in store.countdown
       .then(() => this.props.updateTimes(activityTime, breakTime))
       // updates playSoundOnCountdownEnd flag in store.settings
@@ -57,17 +58,6 @@ class SettingsScreen extends React.Component {
                     type: "success"
                   }))
   }
-
-  _saveSettingsFromStateToStorage = async (activityTime, breakTime, playSoundOnCountdownEnd) => {
-    try {
-      await AsyncStorage.setItem('activityTime', activityTime.toString());
-      await AsyncStorage.setItem('breakTime', breakTime.toString());
-      await AsyncStorage.setItem('playSoundOnCountdownEnd', playSoundOnCountdownEnd.toString())
-      console.log("saved data to storage")
-    } catch (error) {
-      console.log(error)
-    }
-  };
 
   render() {
     return (  

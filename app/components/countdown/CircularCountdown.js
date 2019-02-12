@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Button } from 'native-base'
+import { View, Text } from 'native-base'
 import { StyleSheet } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
@@ -23,8 +23,9 @@ class CircularCountdown extends React.Component {
                     fill={fill}
                     tintColor={this.props.countdownState.wheelColor}
                     backgroundColor="#C6CCCF"
+                    lineCap="square"
                 >
-                    {(dupa) =>
+                    {() =>
                     <View>
                     <Text style={{top: -30}}>
                         {this.props.countdownState.isCountdownRunning ? timerMode : 'WAITING'}

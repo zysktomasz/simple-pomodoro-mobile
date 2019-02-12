@@ -89,7 +89,6 @@ class Countdown extends React.Component {
   }
 
   render() {
-    console.log("Countdown.js this.props.settings", this.props.settings)
       return (
       <View>
         {/* countdown buttons - +/- 60s to countdown time */}
