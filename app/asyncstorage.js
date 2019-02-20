@@ -6,7 +6,7 @@ export const _saveSettingsFromStateToStorage = async (activityTime, breakTime, p
       await AsyncStorage.setItem('activityTime', activityTime.toString());
       await AsyncStorage.setItem('breakTime', breakTime.toString());
       await AsyncStorage.setItem('playSoundOnCountdownEnd', playSoundOnCountdownEnd.toString())
-      await AsyncStorage.setItem('playSoundOnCountdownEnd', playSoundOnCountdownLastTicks.toString())
+      await AsyncStorage.setItem('playSoundOnCountdownLastTicks', playSoundOnCountdownLastTicks.toString())
       console.log("saved data to storage")
     } catch (error) {
       console.log(error)
