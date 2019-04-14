@@ -1,73 +1,107 @@
-import React from 'react';
-import { Container, Content, Text, Card, CardItem, Body, Item, Label, Button, Picker, Toast, CheckBox, ListItem } from 'native-base'
+import React from "react";
+import {
+  Container,
+  Content,
+  Text,
+  Card,
+  CardItem,
+  Body,
+  Item,
+  Label,
+  Button,
+  Picker,
+  Toast,
+  CheckBox,
+  ListItem
+} from "native-base";
 
 // imports method related to storing state in async storage
-import { _saveSettingsFromStateToStorage } from '../../asyncstorage'
+import { _saveSettingsFromStateToStorage } from "../../asyncstorage";
 
 // redux related stuff
-import { connect } from 'react-redux'
-import { updateTimes } from '../../redux/actions/countdownActions'
-import { updateSettings } from '../../redux/actions/settingsActions'
+import { connect } from "react-redux";
+import { updateTimes } from "../../redux/actions/countdownActions";
+import { updateSettings } from "../../redux/actions/settingsActions";
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
-    title: "Settings",
-  }
+    title: "Settings"
+  };
 
   // holds current state of settings
   // - selected time values for each timer
   // - playSoundOnCountdownEnd boolean flag
   state = {
-    activityTimePicked: '',
-    breakTimePicked: '',
+    activityTimePicked: "",
+    breakTimePicked: "",
     playSoundOnCountdownEndPicked: true,
-    playSoundOnCountdownLastTicksPicked: true,
-  }
+    playSoundOnCountdownLastTicksPicked: true
+  };
 
   componentDidMount() {
-    this.setState({ 
+    this.setState({
       activityTimePicked: (this.props.countdown.activityTime / 60).toString(),
       breakTimePicked: (this.props.countdown.breakTime / 60).toString(),
-      playSoundOnCountdownEndPicked: this.props.settings.playSoundOnCountdownEnd,
-      playSoundOnCountdownLastTicksPicked: this.props.settings.playSoundOnCountdownLastTicks
-    })
+      playSoundOnCountdownEndPicked: this.props.settings
+        .playSoundOnCountdownEnd,
+      playSoundOnCountdownLastTicksPicked: this.props.settings
+        .playSoundOnCountdownLastTicks
+    });
   }
 
   // prepares picker.items for each minute (1-59)
   displayPickerItems() {
     let pickerItems = Array();
-    for (i = 1; i < 60; i++)
-    {
-      pickerItems.push(<Picker.Item label={i.toString()} value={i.toString()} key={i.toString()}/>)
+    for (i = 1; i < 60; i++) {
+      pickerItems.push(
+        <Picker.Item
+          label={i.toString()}
+          value={i.toString()}
+          key={i.toString()}
+        />
+      );
     }
     return pickerItems;
   }
 
   onSaveSettings() {
     // values of updates fields
-    let activityTime = parseInt(this.state.activityTimePicked, 10) * 60
-    let breakTime = parseInt(this.state.breakTimePicked, 10) * 60
-    let playSoundOnCountdownEnd = this.state.playSoundOnCountdownEndPicked
-    let playSoundOnCountdownLastTicks = this.state.playSoundOnCountdownLastTicksPicked
+    let activityTime = parseInt(this.state.activityTimePicked, 10) * 60;
+    let breakTime = parseInt(this.state.breakTimePicked, 10) * 60;
+    let playSoundOnCountdownEnd = this.state.playSoundOnCountdownEndPicked;
+    let playSoundOnCountdownLastTicks = this.state
+      .playSoundOnCountdownLastTicksPicked;
 
-    _saveSettingsFromStateToStorage(activityTime, breakTime, playSoundOnCountdownEnd, playSoundOnCountdownLastTicks)
+    _saveSettingsFromStateToStorage(
+      activityTime,
+      breakTime,
+      playSoundOnCountdownEnd,
+      playSoundOnCountdownLastTicks
+    )
       // updates Activity and Break Times in store.countdown
       .then(() => this.props.updateTimes(activityTime, breakTime))
       // updates playSoundOnCountdownEnd flag in store.settings
-      .then(() => this.props.updateSettings(playSoundOnCountdownEnd, playSoundOnCountdownLastTicks))
-      .then(() => Toast.show({
-                    text: "Updated settings!",
-                    buttonText: "cool",
-                    type: "success"
-                  }))
+      .then(() =>
+        this.props.updateSettings(
+          playSoundOnCountdownEnd,
+          playSoundOnCountdownLastTicks
+        )
+      )
+      .then(() =>
+        Toast.show({
+          text: "Updated settings!",
+          buttonText: "cool",
+          type: "success"
+        })
+      );
   }
 
   render() {
-    return (  
+    return (
       <Container>
-        <Content contentContainerStyle={{flex:1}} padder>
-          <Card 
-            // style={{flex: 1}}
+        <Content contentContainerStyle={{ flex: 1 }} padder>
+          <Card
+          // style={{flex: 1}}
           >
             <CardItem>
               <Body>
@@ -79,13 +113,17 @@ class SettingsScreen extends React.Component {
                     placeholderStyle={{ color: "#2874F0" }}
                     note={false}
                     selectedValue={this.state.activityTimePicked}
-                    onValueChange={(selected) => this.setState({activityTimePicked: selected})}
+                    onValueChange={selected =>
+                      this.setState({ activityTimePicked: selected })
+                    }
                   >
-                  {this.displayPickerItems()}
+                    {this.displayPickerItems()}
                   </Picker>
                   <Label>Activity Time</Label>
                 </Item>
-                <Text style={{fontSize: 12, fontStyle: "italic"}}>Setup time for activity countdown (1-59 min)</Text>
+                <Text style={{ fontSize: 12, fontStyle: "italic" }}>
+                  Setup time for activity countdown (1-59 min)
+                </Text>
 
                 {/* Break Time PICKER */}
                 <Item picker>
@@ -95,21 +133,29 @@ class SettingsScreen extends React.Component {
                     placeholderStyle={{ color: "#2874F0" }}
                     note={false}
                     selectedValue={this.state.breakTimePicked}
-                    onValueChange={(selected) => this.setState({breakTimePicked: selected})}                  
+                    onValueChange={selected =>
+                      this.setState({ breakTimePicked: selected })
+                    }
                   >
-                  {this.displayPickerItems()}
+                    {this.displayPickerItems()}
                   </Picker>
                   <Label>Break Time</Label>
                 </Item>
-                <Text style={{fontSize: 12, fontStyle: "italic"}}>Setup time for break countdown (1-59 min)</Text>
-
+                <Text style={{ fontSize: 12, fontStyle: "italic" }}>
+                  Setup time for break countdown (1-59 min)
+                </Text>
               </Body>
             </CardItem>
             {/* play sound on countdown switch flag */}
             <ListItem>
-              <CheckBox 
+              <CheckBox
                 checked={this.state.playSoundOnCountdownEndPicked}
-                onPress={() => this.setState({playSoundOnCountdownEndPicked: !this.state.playSoundOnCountdownEndPicked})}
+                onPress={() =>
+                  this.setState({
+                    playSoundOnCountdownEndPicked: !this.state
+                      .playSoundOnCountdownEndPicked
+                  })
+                }
               />
               <Body>
                 <Text>Play notification song on countdown's end</Text>
@@ -117,16 +163,21 @@ class SettingsScreen extends React.Component {
             </ListItem>
             {/* play sound on countdown's last 5 seconds switch flag */}
             <ListItem>
-              <CheckBox 
+              <CheckBox
                 checked={this.state.playSoundOnCountdownLastTicksPicked}
-                onPress={() => this.setState({playSoundOnCountdownLastTicksPicked: !this.state.playSoundOnCountdownLastTicksPicked})}
+                onPress={() =>
+                  this.setState({
+                    playSoundOnCountdownLastTicksPicked: !this.state
+                      .playSoundOnCountdownLastTicksPicked
+                  })
+                }
               />
               <Body>
                 <Text>Play clock tick sound on countdown's last 5 seconds</Text>
               </Body>
             </ListItem>
           </Card>
-              {/* save settings button */}
+          {/* save settings button */}
           <Button block onPress={() => this.onSaveSettings()}>
             <Text>Save settings</Text>
           </Button>
@@ -140,17 +191,23 @@ class SettingsScreen extends React.Component {
 
 const mapStateToProps = state => {
   return {
-      settings: state.settings,
-      countdown: state.countdown,
-  }
-}
+    settings: state.settings,
+    countdown: state.countdown
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
-      updateTimes: (activityTime, breakTime) => dispatch(updateTimes(activityTime, breakTime)),
-      updateSettings: (playSoundOnCountdownEnd, playSoundOnCountdownLastTicks) => 
-        dispatch(updateSettings(playSoundOnCountdownEnd, playSoundOnCountdownLastTicks))
-  }
-}
+    updateTimes: (activityTime, breakTime) =>
+      dispatch(updateTimes(activityTime, breakTime)),
+    updateSettings: (playSoundOnCountdownEnd, playSoundOnCountdownLastTicks) =>
+      dispatch(
+        updateSettings(playSoundOnCountdownEnd, playSoundOnCountdownLastTicks)
+      )
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SettingsScreen);

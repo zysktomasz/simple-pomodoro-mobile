@@ -1,19 +1,18 @@
-import React from 'react';
-import { createStackNavigator, createAppContainer } from 'react-navigation'
+import React from "react";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
 // import redux-related stuff
-import { Provider } from 'react-redux';
-import { Root } from 'native-base'
-import store from './app/redux/store';
+import { Provider } from "react-redux";
+import { Root } from "native-base";
+import store from "./app/redux/store";
 
-import PomodoroScreen from './app/components/screens/PomodoroScreen'
-import SettingsScreen from './app/components/screens/SettingsScreen'
-
+import PomodoroScreen from "./app/components/screens/PomodoroScreen";
+import SettingsScreen from "./app/components/screens/SettingsScreen";
 
 const AppNavigator = createStackNavigator(
   {
-  Pomodoro: PomodoroScreen,
-  Settings: SettingsScreen
+    Pomodoro: PomodoroScreen,
+    Settings: SettingsScreen
   },
   {
     initialRouteName: "Pomodoro"
