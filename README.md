@@ -14,12 +14,12 @@ Screen
 
 ### Main Screen - Focus Mode
 
-![pomodoro react native](https://i.imgur.com/XNqE6kQ.png)
+<img src="https://i.imgur.com/XNqE6kQ.png" width="507" height="902" />
 
 ### Main Screen - Chill Mode
 
-![pomodoro react native](https://i.imgur.com/yxEO9qo.png)
+<img src="https://i.imgur.com/yxEO9qo.png" width="507" height="902" />
 
 ### Settings Screen
 
-![pomodoro react native](https://i.imgur.com/kPSLZeu.png)
+<img src="https://i.imgur.com/kPSLZeu.png" width="507" height="902" />
